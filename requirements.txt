@@ -1,0 +1,10 @@
+dotenv
+langchain
+langchain-openai
+langgraph
+langgraph-checkpoint-postgres
+psycopg_binary
+numpy
+pandas
+matplotlib
+seaborn

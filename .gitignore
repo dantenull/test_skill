@@ -1,0 +1,9 @@
+.vscode
+.venv
+.cline
+data/*.csv
+results
+contexts
+*.ipynb
+test.py
+.env
