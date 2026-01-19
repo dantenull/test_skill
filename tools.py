@@ -5,6 +5,9 @@ from typing import Optional
 
 from langchain.tools import tool
 
+from llm import llm
+from constants import BASE_PATH
+
 
 @tool
 def run_python_code(
@@ -194,3 +197,85 @@ def get_context(agent_name: str = None, context_name: str = None) -> str:
     except FileNotFoundError:
         return f"Context '{context_name}' not found for agent '{agent_name}', please check the context name and the agent name."
     return context
+
+
+@tool
+def read_file(file_path: str, encoding: str = 'utf-8') -> str:
+    """
+    读取文件内容并返回。
+    
+    Args:
+        file_path: 文件相对路径
+        encoding: 文件编码，默认utf-8
+    Returns:
+        str: 文件内容
+    """
+    base_path = Path(BASE_PATH)
+    file_path = base_path / file_path
+    try:
+        with open(file_path, 'r', encoding=encoding) as f:
+            content = f.read()
+    except FileNotFoundError:
+        return f"File '{file_path}' not found, please check the file path."
+    except Exception as e:
+        return f'Error reading file {file_path}: {e}'
+    return content
+
+
+@tool
+def write_file(file_path: str, content: str, encoding: str = 'utf-8') -> str:
+    """
+    写入文件内容。
+    如果目录中的文件夹不存在，会自动创建。
+    
+    Args:
+        file_path: 文件相对路径
+        content: 要写入的内容
+        encoding: 文件编码，默认utf-8
+    Returns:
+        str: 写入是否成功
+    """
+    base_path = Path(BASE_PATH)
+    file_path = base_path / file_path
+    try:
+        directory = os.path.dirname(file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(file_path, 'w', encoding=encoding) as f:
+            f.write(content)
+    except FileNotFoundError:
+        return f"Directory '{directory}' not found, please check the file path."
+    except Exception as e:
+        return f'Error writing file {file_path}: {e}'
+    return f'Content written to {file_path}'
+
+
+@tool
+def ls(directory: str) -> str:
+    """
+    递归获取基于基础目录的某个目录下的所有文件的相对路径。
+    
+    Args:
+        directory: 目录。相对路径
+    Returns:
+        str: 目录下的所有文件的相对路径
+    """
+    base_path = Path(BASE_PATH)
+    directory = base_path / directory
+    relative_paths = [str(f.relative_to(base_path)) for f in directory.rglob('*') if f.is_file()]
+    return relative_paths
+
+
+@tool
+async def task_done() -> str:
+    """
+    判断任务是否可以结束。
+
+    Args:
+        无
+    Returns:
+        str: 是否可以结束
+    """
+    message = f'判断任务是否可以结束。判断标准：是否已探索并验证了大部分假设，回答"是"或"否"'
+    resp = await llm.ainvoke(message)
+    return resp.content

@@ -1,0 +1,1 @@
+BASE_PATH = 'D:/AI/test_skill/'

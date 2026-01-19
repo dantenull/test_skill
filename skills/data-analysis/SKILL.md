@@ -277,6 +277,6 @@ EDA 中非常重要的一点是：
 
 ## base_analysis.py
 
-如果需要一般性数据概览，可使用base_analysis.py脚本。
+只在需要一般性数据概览时使用。
 
 用法： python scripts/base_analysis.py \<file\>

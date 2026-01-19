@@ -1,10 +1,12 @@
 dotenv
+colorama
 langchain
 langchain-openai
 langgraph
-langgraph-checkpoint-postgres
-psycopg_binary
+deepagents
+jinja2
 numpy
 pandas
 matplotlib
 seaborn
+scipy

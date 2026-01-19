@@ -3,7 +3,11 @@
 .cline
 data/*.csv
 results
+result
 contexts
+context
 *.ipynb
 test.py
 .env
+__pycache__
+*.pyc
